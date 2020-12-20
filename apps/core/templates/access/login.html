@@ -1,0 +1,74 @@
+{% extends 'website/base.html'%}
+{% block content %}
+<!-- Alerts -->
+{% include 'website/alerts.html' %}
+<div class="hero-static d-flex align-items-center">
+	<div class="w-100">
+		<!-- Sign Up Section -->
+		<div class="bg-white">
+			<div class="content content-full">
+				<div class="row justify-content-center" id="signup-app">
+					<div class="col-md-8 col-lg-6 col-xl-4 py-4">
+						<!-- Header -->
+						<div class="text-center">
+							<p class="mb-2">
+								<i class="fa fa-2x fa-circle-notch text-primary"></i>
+							</p>
+							<h1 class="h4  mb-1">
+								Sign In
+							</h1>
+							<h2 class="h6 font-w400 text-muted mb-3">
+								Use Your Email & Password To Get Access
+							</h2>
+						</div>
+						{% if form.errors %}
+							<div class="alert alert-danger text-center" role="alert">
+								{{ form.non_field_errors }}
+								    {% for field in form %}
+                                        {% if field.errors %}{{ field.label }}:{{ field.errors|striptags }}<br>
+                                    {% endif %}
+								{% endfor %}
+							</div>
+						{% endif %}
+						
+						<!-- END Header -->
+						<form class="js-validation-signup" action="." method="POST" v-on:submit="validateForm" novalidate>
+							{% csrf_token %}
+							
+							<div class="py-3">
+								<div class="form-group">
+									<input type="email" class="form-control form-control-lg form-control-alt" id="id_username" name="username" placeholder="Enter Your Email">
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control form-control-lg form-control-alt" id="id_password" name="password" placeholder="Enter Your Password">
+                                </div>
+                                <div class="form-group">
+                                <div class="d-md-flex align-items-md-center justify-content-md-between">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="login-remember" name="login-remember">
+                                        <label class="custom-control-label font-w400" for="login-remember">Remember Me</label>
+                                    </div>
+                                    <div class="py-2">
+                                        <a class="font-size-sm font-w500" href="{% url 'password_reset' %}">Password Reset Here.</a>
+                                    </div>
+                                </div>	
+                                </div>
+							</div>
+							
+							<div class="form-group row justify-content-center mb-0">
+								<div class="col-md-6 col-xl-5">
+									<button type="submit" class="btn btn-sm btn-block btn-success">
+										<i class="fa fa-fw fa-plus mr-1"></i> Login
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END Sign Up Section -->
+	</div>
+</div>
+{% endblock %}
+

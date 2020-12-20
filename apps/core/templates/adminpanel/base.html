@@ -1,0 +1,16 @@
+{% include 'adminpanel/header.html' %}
+
+{% include 'adminpanel/sidenav.html' %}
+
+{% include 'adminpanel/topnav.html' %}
+
+<!-- Main Container -->
+<main id="main-container">
+  {% block content %}
+  {% endblock %}
+</main>
+ 
+<!-- END Main Container -->
+{% include 'adminpanel/footer.html' %}
+{% block scripts %}
+{% endblock %}

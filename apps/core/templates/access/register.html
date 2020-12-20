@@ -1,0 +1,140 @@
+{% extends 'website/base.html'%}
+{% block content %}
+<!-- Alerts -->
+{% include 'website/alerts.html' %}
+<div class="hero-static d-flex align-items-center">
+	<div class="w-100">
+		<!-- Sign Up Section -->
+		<div class="bg-white">
+			<div class="content content-full">
+				<div class="row justify-content-center" id="signup-app">
+					<div class="col-md-8 col-lg-6 col-xl-4 py-4">
+						<!-- Header -->
+						<div class="text-center">
+							<p class="mb-2">
+								<i class="fa fa-2x fa-circle-notch text-primary"></i>
+							</p>
+							<h1 class="h4  mb-1">
+								Create Account
+							</h1>
+							<h2 class="h6 font-w400 text-muted mb-3">
+								Get your access today in one easy step
+							</h2>
+						</div>
+						{% if form.errors %}
+							<div class="alert alert-danger text-center" role="alert">
+								{{ form.non_field_errors }}
+									{% for field in form %}
+										{% if field.errors %}{{ field.label }}:{{ field.errors|striptags }}<br>
+									{% endif %}
+								{% endfor %}
+							</div>
+						{% endif %}
+							<div class="alert alert-danger text-center" role="alert" v-if="errors.length">
+								<p v-for="error in errors">
+									[[ error ]]
+								</p>
+							</div>
+						
+						<!-- END Header -->
+						<form class="js-validation-signup" action="." method="POST" v-on:submit="validateForm" novalidate>
+							{% csrf_token %}
+							
+							<div class="py-3">
+								<div class="form-group">
+									<input type="email" class="form-control form-control-lg form-control-alt" id="id_username" name="username" v-model="username" placeholder="Email">
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control form-control-lg form-control-alt" id="id_password1" name="password1" v-model="password1" placeholder="Password">
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control form-control-lg form-control-alt" id="id_password2" name="password2" v-model="password2" placeholder="Confirm Password">
+								</div>
+								<div class="form-group">
+									<div class="d-md-flex align-items-md-center justify-content-md-between">
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" class="custom-control-input" id="signup-terms" name="signup-terms">
+											<label class="custom-control-label font-w400" for="signup-terms">I agree to Terms &amp;
+												Conditions</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group row justify-content-center mb-0">
+								<div class="col-md-6 col-xl-5">
+									<button type="submit" class="btn btn-sm btn-block btn-success">
+										<i class="fa fa-fw fa-plus mr-1"></i> Sign Up
+									</button>
+								</div>
+							</div>
+						</form>
+						<br><br>
+						<p class="text-primary">Instructions:</p>
+						<ul class="text-info">
+							<li v-if="password1.length<8">Password must contain at least 8 characters.</li>
+							<li v-if="!isNaN(password1)">Password can't be entierly numaric.</li>
+						</ul>
+						<!-- END Sign Up Form -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END Sign Up Section -->
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+	const SignupApp ={
+		data(){
+			return{
+				username:'',
+				password1:'',
+				password2:'',
+				errors:[],
+			}
+		},
+		delimiters: ['[[', ']]'],
+		methods:{
+			validateForm(e){
+				this.errors=[]
+				if(!this.validateEmail(this.username)){
+					this.errors.push('Email Address Is Invalid!')
+				}
+				if(this.password1 === ''){
+					this.errors.push('Password Is Missing!')
+				}
+				if(this.password1.length < 8){
+					this.errors.push('Password Must Be At Least 8 Characters')
+				}
+				if(!isNaN(this.password1)){
+					this.errors.push('Password Can\'t Be Only Numaric')
+				}
+				if(this.password1 !== this.password2){
+					this.errors.push('Passwords Did Not Matched!')
+				}
+
+				if (this.errors.length){
+					e.preventDefault()
+					return false
+				}
+				else{
+					return true
+				}
+			},
+			validateEmail(email){
+				if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+					return true
+					}
+				else{
+					return false
+				}
+			}
+			
+		}
+	}
+	Vue.createApp(SignupApp).mount('#signup-app')
+</script>
+{% endblock %}
