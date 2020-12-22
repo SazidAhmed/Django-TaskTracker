@@ -1,0 +1,100 @@
+{% extends 'adminpanel/base.html'%}
+{% block content %}
+
+<!-- Hero -->
+<div class="bg-body-light">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill h3 my-2">
+                Settings <small class="font-size-base font-w400 text-muted">
+                    <a href="#"></a>
+                </small>
+            </h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-alt">
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a class="link-fx" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">Profile</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{% include 'website/alerts.html' %}
+{% if form.errors %}
+    <div class="alert alert-danger text-center" role="alert">
+        {{ form.non_field_errors }}
+            {% for field in form %}
+                {% if field.errors %}{{ field.label }}:{{ field.errors|striptags }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="block block-rounded">
+                <div class="block-content block-content-full">
+                    <h3 class="text-center">Profile Details</h3>
+                    <form class="mb-5" method="post" action="{% url 'profile_settings' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-lg form-control-alt"
+                                id="signup-first_name" name="first_name" value="{{ request.user.first_name }}"
+                                placeholder="First Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-lg form-control-alt"
+                                id="signup-last_name" name="last_name" value="{{ request.user.last_name }}"
+                                placeholder="Last Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-lg form-control-alt"
+                                id="signup-username" name="username" value="{{ request.user.username }}"
+                                placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control form-control-lg form-control-alt" id="signup-email"
+                                name="email" value="{{ request.user.email }}" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-block btn-success">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div  class="block block-rounded">
+                <div class="block-content block-content-full">
+                    <h3 class="text-center">Update Password</h3>
+                    <form class="mb-5" method="post" action="">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-lg form-control-alt"
+                                id="signup-first_name" name="old_password"
+                                placeholder="Enter Current Password">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-lg form-control-alt"
+                                id="signup-first_name" name="new_password1"
+                                placeholder="Enter New Password">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-lg form-control-alt"
+                                id="signup-last_name" name="new_password2"
+                                placeholder="Enter Confirm Password">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-block btn-success">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->
+{% endblock %}

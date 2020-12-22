@@ -1,14 +1,138 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'adminpanel/base.html'%}
+{% block content %}
+<!-- Hero -->
+<div class="bg-body-light">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill h3 my-2">
+                Dashboard <small class="font-size-base font-w400 text-muted"></small>
+            </h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-alt">
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a class="link-fx" href="/">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">Dashboard</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- END Hero -->
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
-</head>
+<!-- Page Content -->
+<div class="content">
+    <div class="row row-deck">
+        <div class="col-6 col-sm-3 col-xl-3">
+            <div class="block block-rounded d-flex flex-column">
+                <div
+                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                    <dl class="mb-0">
+                        <dt class="font-size-h2 font-w700">5</dt>
+                        <dd class="text-muted mb-0">Categories</dd>
+                    </dl>
+                    <div class="item item-rounded bg-body">
+                        <i class="fa fa-shopping-cart font-size-h3 text-primary"></i>
+                    </div>
+                </div>
+                <div class="block-content block-content-full block-content-sm bg-body-light font-size-sm">
+                    <a class="font-w500 d-flex align-items-center"  href="">
+                        View all
+                        <i class="fa fa-arrow-alt-circle-right ml-1 opacity-25 font-size-base"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-3 col-xl-3">
+            <div class="block block-rounded d-flex flex-column">
+                <div
+                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                    <dl class="mb-0">
+                        <dt class="font-size-h2 font-w700">5</dt>
+                        <dd class="text-muted mb-0">Manufactures</dd>
+                    </dl>
+                    <div class="item item-rounded bg-body">
+                        <i class="fa fa-users font-size-h3 text-primary"></i>
+                    </div>
+                </div>
+                <div class="block-content block-content-full block-content-sm bg-body-light font-size-sm">
+                    <a class="font-w500 d-flex align-items-center" href="">
+                        View All
+                        <i class="fa fa-arrow-alt-circle-right ml-1 opacity-25 font-size-base"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-3 col-xl-3">
+            <div class="block block-rounded d-flex flex-column">
+                <div
+                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                    <dl class="mb-0">
+                        <dt class="font-size-h2 font-w700">5</dt>
+                        <dd class="text-muted mb-0">Products</dd>
+                    </dl>
+                    <div class="item item-rounded bg-body">
+                        <i class="fa fa-inbox font-size-h3 text-primary"></i>
+                    </div>
+                </div>
+                <div class="block-content block-content-full block-content-sm bg-body-light font-size-sm">
+                    <a class="font-w500 d-flex align-items-center" href="">
+                        View All
+                        <i class="fa fa-arrow-alt-circle-right ml-1 opacity-25 font-size-base"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
 
-<body>
-  <h1>Dashboard</h1>
-</body>
+        <div class="col-6 col-sm-3 col-xl-3">
+            <div class="block block-rounded d-flex flex-column">
+                <div
+                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                    <dl class="mb-0">
+                        <dt class="font-size-h2 font-w700">5</dt>
+                        <dd class="text-muted mb-0">Customers</dd>
+                    </dl>
+                    <div class="item item-rounded bg-body">
+                        <i class="fa fa-inbox font-size-h3 text-primary"></i>
+                    </div>
+                </div>
+                <div class="block-content block-content-full block-content-sm bg-body-light font-size-sm">
+                    <a class="font-w500 d-flex align-items-center" href="">
+                        View All
+                        <i class="fa fa-arrow-alt-circle-right ml-1 opacity-25 font-size-base"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-</html>
+    <!-- END Overview -->
+    <!-- Charts -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="block block-rounded">
+               
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="block block-rounded">
+                
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="block block-rounded">
+ 
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="block block-rounded">
+
+            </div>
+        </div>
+    </div>
+    
+   
+</div>
+{% endblock %}
