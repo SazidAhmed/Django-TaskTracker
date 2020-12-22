@@ -1,0 +1,143 @@
+{% extends 'website/base.html'%}
+{% block content %}
+<!-- Alerts -->
+{% include 'website/alerts.html' %}
+  <div class="bg-primary-dark">
+      <div class="content content-full overflow-hidden">
+          <div class="mt-7 mb-5 text-center">
+              <h1 class="h2 text-white mb-2 js-appear-enabled animated fadeInDown" data-toggle="appear" data-class="animated fadeInDown">Super flexible plans just for you.</h1>
+              <h2 class="h4 font-w400 text-white-75 js-appear-enabled animated fadeInDown" data-toggle="appear" data-class="animated fadeInDown">Step up your experience with a better plan.</h2>
+          </div>
+      </div>
+  </div>
+  <div class="content overflow-hidden">
+      <div class="row">
+          <div class="col-md-6 col-xl-3 js-appear-enabled animated fadeInUp" data-toggle="appear" data-offset="50" data-class="animated fadeInUp">
+              <!-- Developer Plan -->
+              <a class="block block-rounded block-link-shadow text-center" href="{% url 'upgrage-plans' %}">
+                  <div class="block-header">
+                      <h3 class="block-title">Basic</h3>
+                  </div>
+                  <div class="block-content bg-body-light">
+                      <div class="py-2">
+                          <p class="h1 font-w700 mb-2">$0</p>
+                          <p class="h6 text-muted">per month</p>
+                      </div>
+                  </div>
+                  <div class="block-content">
+                      <div class="font-size-sm py-2">
+                          <p>
+                              <strong>5</strong> Categories
+                          </p>
+                          <p>
+                              <strong>20</strong> Bookmarks
+                          </p>
+                            <p>
+                              <strong>No</strong> Support
+                          </p>
+                      </div>
+                  </div>
+                    <div class="block-content block-content-full bg-body-light">
+                      <span class="btn btn-secondary px-4" >Sign In</span>
+                    </div>
+              </a>
+              <!-- END Developer Plan -->
+          </div>
+          <div class="col-md-6 col-xl-3 js-appear-enabled animated fadeInUp" data-toggle="appear" data-offset="50" data-timeout="200" data-class="animated fadeInUp">
+              <!-- Startup Plan -->
+              <a class="block block-rounded block-link-shadow block-themed block-fx-shadow text-center" href="{% url 'upgrage-plans' %}">
+                  <div class="block-header">
+                      <h3 class="block-title">Pro</h3>
+                  </div>
+                  <div class="block-content bg-body-light">
+                      <div class="py-2">
+                          <p class="h1 font-w700 mb-2">$5</p>
+                          <p class="h6 text-muted">per month</p>
+                      </div>
+                  </div>
+                  <div class="block-content">
+                      <div class="font-size-sm py-2">
+                          <p>
+                              <strong>5</strong> Categories
+                          </p>
+                          <p>
+                              <strong>50</strong> Bookmarks
+                          </p>
+                           <p>
+                              <strong>Basic</strong> Support
+                          </p>
+                      </div>
+                  </div>
+                  <div class="block-content block-content-full bg-body-light">
+                      <span class="btn btn-primary px-4" >Buy</span>
+                  </div>
+              </a>
+              <!-- END Startup Plan -->
+          </div>
+          <div class="col-md-6 col-xl-3 js-appear-enabled animated fadeInUp" data-toggle="appear" data-offset="50" data-timeout="400" data-class="animated fadeInUp">
+              <!-- Business Plan -->
+              <a class="block block-rounded block-link-shadow text-center " href="{% url 'upgrage-plans' %}">
+                  <div class="block-header">
+                      <h3 class="block-title">
+                          <i class="fa fa-thumbs-up mr-1"></i> Business
+                      </h3>
+                  </div>
+                  <div class="block-content bg-body-light">
+                      <div class="py-2">
+                          <p class="h1 font-w700 mb-2">$20</p>
+                          <p class="h6 text-muted">per month</p>
+                      </div>
+                  </div>
+                  <div class="block-content">
+                       <div class="font-size-sm py-2">
+                          <p>
+                              <strong>20</strong> Categories
+                          </p>
+                          <p>
+                              <strong>200</strong> Bookmarks
+                          </p>
+                          <p>
+                              <strong>Technical</strong> Support
+                          </p>
+                      </div>
+                  </div>
+                  <div class="block-content block-content-full bg-body-light">
+                      <span class="btn btn-secondary px-4">Buy</span>
+                  </div>
+              </a>
+              <!-- END Business Plan -->
+          </div>
+          <div class="col-md-6 col-xl-3 js-appear-enabled animated fadeInUp" data-toggle="appear" data-offset="50" data-timeout="600" data-class="animated fadeInUp">
+              <!-- VIP Plan -->
+              <a class="block block-rounded block-link-shadow text-center" href="{% url 'upgrage-plans' %}">
+                  <div class="block-header">
+                      <h3 class="block-title">VIP</h3>
+                  </div>
+                  <div class="block-content bg-body-light">
+                      <div class="py-2">
+                          <p class="h1 font-w700 mb-2">$50</p>
+                          <p class="h6 text-muted">per month</p>
+                      </div>
+                  </div>
+                  <div class="block-content">
+                      <div class="font-size-sm py-2">
+                          <p>
+                              <strong>Unlimited</strong> Categories
+                          </p>
+                          <p>
+                              <strong>Unlimited</strong> Bookmarks
+                          </p>
+                          <p>
+                              <strong>FULL</strong> Support
+                          </p>
+                      </div>
+                  </div>
+                  <div class="block-content block-content-full bg-body-light">
+                      <span class="btn btn-secondary px-4">Buy</span>
+                  </div>
+              </a>
+              <!-- END VIP Plan -->
+          </div>
+      </div>
+  </div>
+{% endblock %}

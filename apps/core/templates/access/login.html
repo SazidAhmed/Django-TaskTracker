@@ -21,15 +21,6 @@
 								Use Your Email & Password To Get Access
 							</h2>
 						</div>
-						{% if form.errors %}
-							<div class="alert alert-danger text-center" role="alert">
-								{{ form.non_field_errors }}
-								    {% for field in form %}
-                                        {% if field.errors %}{{ field.label }}:{{ field.errors|striptags }}<br>
-                                    {% endif %}
-								{% endfor %}
-							</div>
-						{% endif %}
 						
 						<!-- END Header -->
 						<form class="js-validation-signup" action="." method="POST" v-on:submit="validateForm" novalidate>
@@ -37,10 +28,10 @@
 							
 							<div class="py-3">
 								<div class="form-group">
-									<input type="email" class="form-control form-control-lg form-control-alt" id="id_username" name="username" placeholder="Enter Your Email">
+									<input type="email" class="form-control is-valid" id="id_username" name="username" placeholder="Enter Username" autofocus>
 								</div>
 								<div class="form-group">
-									<input type="password" class="form-control form-control-lg form-control-alt" id="id_password" name="password" placeholder="Enter Your Password">
+									<input type="password" class="form-control is-valid" id="id_password" name="password" placeholder="Enter Password">
                                 </div>
                                 <div class="form-group">
                                 <div class="d-md-flex align-items-md-center justify-content-md-between">
@@ -54,15 +45,23 @@
                                 </div>	
                                 </div>
 							</div>
-							
 							<div class="form-group row justify-content-center mb-0">
 								<div class="col-md-6 col-xl-5">
 									<button type="submit" class="btn btn-sm btn-block btn-success">
-										<i class="fa fa-fw fa-plus mr-1"></i> Login
+										<i class="fa fa-fw fa-check-circle mr-1"></i> Login
 									</button>
 								</div>
 							</div>
-						</form>
+						</form><br>
+						{% if form.errors %}
+							<div class="alert alert-danger text-center" role="alert">
+								{{ form.non_field_errors }}
+								    {% for field in form %}
+                                        {% if field.errors %}{{ field.label }}:{{ field.errors|striptags }}<br>
+                                    {% endif %}
+								{% endfor %}
+							</div>
+						{% endif %}
 					</div>
 				</div>
 			</div>

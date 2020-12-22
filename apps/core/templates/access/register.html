@@ -25,16 +25,12 @@
 							<div class="alert alert-danger text-center" role="alert">
 								{{ form.non_field_errors }}
 									{% for field in form %}
-										{% if field.errors %}{{ field.label }}:{{ field.errors|striptags }}<br>
+										{% if field.errors %}{{ field.label }}:{{ field.errors|striptags }}
 									{% endif %}
 								{% endfor %}
 							</div>
 						{% endif %}
-							<div class="alert alert-danger text-center" role="alert" v-if="errors.length">
-								<p v-for="error in errors">
-									[[ error ]]
-								</p>
-							</div>
+						
 						
 						<!-- END Header -->
 						<form class="js-validation-signup" action="." method="POST" v-on:submit="validateForm" novalidate>
@@ -42,13 +38,22 @@
 							
 							<div class="py-3">
 								<div class="form-group">
-									<input type="email" class="form-control form-control-lg form-control-alt" id="id_username" name="username" v-model="username" placeholder="Email">
+									<input type="text" class="form-control is-valid " id="id_first_name" name="first_name" v-model="first_name" placeholder="First Name" autofocus>
 								</div>
 								<div class="form-group">
-									<input type="password" class="form-control form-control-lg form-control-alt" id="id_password1" name="password1" v-model="password1" placeholder="Password">
+									<input type="text" class="form-control is-valid " id="id_last_name" name="last_name" v-model="last_name" placeholder="Last Name">
 								</div>
 								<div class="form-group">
-									<input type="password" class="form-control form-control-lg form-control-alt" id="id_password2" name="password2" v-model="password2" placeholder="Confirm Password">
+									<input type="text" class="form-control is-valid " id="id_username" name="username" v-model="username" placeholder="Username">
+								</div>
+								<div class="form-group">
+									<input type="email" class="form-control is-valid " id="id_email" name="email" v-model="email" placeholder="Email Address">
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control is-valid " id="id_password1" name="password1" v-model="password1" placeholder="Password">
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control is-valid " id="id_password2" name="password2" v-model="password2" placeholder="Confirm Password">
 								</div>
 								<div class="form-group">
 									<div class="d-md-flex align-items-md-center justify-content-md-between">
@@ -64,14 +69,22 @@
 							<div class="form-group row justify-content-center mb-0">
 								<div class="col-md-6 col-xl-5">
 									<button type="submit" class="btn btn-sm btn-block btn-success">
-										<i class="fa fa-fw fa-plus mr-1"></i> Sign Up
+										<i class="fa fa-fw fa-check-circle mr-1"></i> Sign Up
 									</button>
 								</div>
 							</div>
 						</form>
 						<br><br>
+						<div>
+							<div class="alert alert-danger text-left" role="alert" v-if="errors.length">
+								<ul v-for="error in errors">
+									[[ error ]]
+								</ul>
+							</div>
+						</div>
 						<p class="text-primary">Instructions:</p>
 						<ul class="text-info">
+							<li v-if="username.length<3">Username must contain at least 3 characters.</li>
 							<li v-if="password1.length<8">Password must contain at least 8 characters.</li>
 							<li v-if="!isNaN(password1)">Password can't be entierly numaric.</li>
 						</ul>
@@ -90,7 +103,10 @@
 	const SignupApp ={
 		data(){
 			return{
+				first_name:'',
+				last_name:'',
 				username:'',
+				email:'',
 				password1:'',
 				password2:'',
 				errors:[],
@@ -100,20 +116,44 @@
 		methods:{
 			validateForm(e){
 				this.errors=[]
-				if(!this.validateEmail(this.username)){
+				if(this.first_name === ''){
+					this.errors.push('First Name Is Missing!')
+				}
+				if(this.last_name === ''){
+					this.errors.push('Last Name Is Missing!')
+				}
+				
+				if(this.username === ''){
+					this.errors.push('Username Is Missing!')
+				}
+				else{
+					if(this.username.length < 3){
+						this.errors.push('Username Must Be At Least 3 Characters')
+					}
+				}
+				if(!this.validateEmail(this.email)){
 					this.errors.push('Email Address Is Invalid!')
 				}
+				
 				if(this.password1 === ''){
 					this.errors.push('Password Is Missing!')
 				}
-				if(this.password1.length < 8){
-					this.errors.push('Password Must Be At Least 8 Characters')
+				else{
+					if(this.password1.length < 8){
+						this.errors.push('Password Must Be At Least 8 Characters')
+					}
+					if(!isNaN(this.password1)){
+						this.errors.push('Password Can\'t Be Only Numaric')
+					}
 				}
-				if(!isNaN(this.password1)){
-					this.errors.push('Password Can\'t Be Only Numaric')
+
+				if(this.password2 === ''){
+					this.errors.push('Confirm Password Is Missing!')
 				}
-				if(this.password1 !== this.password2){
-					this.errors.push('Passwords Did Not Matched!')
+				else{
+					if(this.password1 !== this.password2){
+						this.errors.push('Passwords Did Not Matched!')
+					}
 				}
 
 				if (this.errors.length){
