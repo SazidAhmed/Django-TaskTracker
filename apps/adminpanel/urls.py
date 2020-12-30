@@ -10,9 +10,6 @@ urlpatterns = [
     path('userprofile', userprofile, name='userprofile'),
     path('profile_settings', profile_settings, name='profile_settings'),
     path('changePass', changePass, name='changePass'),
-
-
-
     # Admin panel apis
 
 ]

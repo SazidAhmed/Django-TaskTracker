@@ -29,6 +29,9 @@ urlpatterns = [
 
     # Adminpanel Urls
     path('adminpanel/', include('apps.adminpanel.urls')),
+
+    #Team Urls
+    path('teams/', include('apps.team.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
