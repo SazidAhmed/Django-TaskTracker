@@ -1,0 +1,47 @@
+{% extends 'adminpanel/base.html'%}
+{% block content %}
+
+<!-- Hero -->
+<div class="bg-body-light">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill h3 my-2">
+               Team Details<small class="font-size-base font-w400 text-muted">
+                    <a href="#"></a>
+                </small>
+            </h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-alt">
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a class="link-fx" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item" href="{% url 'team:teamDetails' team.id %}">Team Details</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{% include 'website/alerts.html' %}
+{% if form.errors %}
+    <div class="alert alert-danger text-center" role="alert">
+        {{ form.non_field_errors }}
+            {% for field in form %}
+                {% if field.errors %}{{ field.label }}:{{ field.errors|striptags }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- Page Content -->
+<div class="content">
+    <!-- Active Teams -->
+    <h2 class="text-success">Team : {{team.title}}</h2>
+    <div class="row row-deck">
+        Members : 
+       {% for member in team.members.all %}
+        <p>{{member.username}}</p>
+       {% endfor %}
+    </div>
+</div>
+<!-- END Page Content -->
+{% endblock %}

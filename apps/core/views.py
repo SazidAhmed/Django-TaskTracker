@@ -38,6 +38,7 @@ def register(request):
           # messages.success(request, 'You Are Logged In!')
           # return redirect('dashboard')
           user.save()
+          userprofile = Userprofile.objects.create(user=user)
           messages.success(request, 'You Are Now Registered And Can Log In!')
           return redirect('login')
 
