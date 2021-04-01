@@ -156,7 +156,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'oceanta.fashion@gmail.com' 
-EMAIL_HOST_PASSWORD = 'OceantaN1Fa$hi0n'
+EMAIL_HOST_PASSWORD = '123456'
 DEFAULT_EMAIL_FROM = 'oceanta.fashion@gmail.com'
 
 WEBSITE_URL = 'http://127.0.0.1:8000'
