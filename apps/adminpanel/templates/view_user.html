@@ -1,0 +1,116 @@
+{% extends 'adminpanel/base.html'%}
+{% load dashboardextras %}
+{% block content %}
+<!-- Hero -->
+<div class="bg-body-light">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill h3 my-2">
+                Dashboard <small class="font-size-base font-w400 text-muted"></small>
+            </h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-alt">
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a class="link-fx" href="/">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">Dashboard</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- END Hero -->
+
+<!-- Page Content -->
+<div class="content">
+    <!-- END Overview -->
+    <div class="row">
+        <div class="col-lg-3 mt-3">
+            <img class="mb-3" src="{{ request.user.userprofile.get_avatar }}" alt="No Image Found" width="100" height="120">
+            <h5>Username : {{ request.user.username }}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>{% firstof user.get_full_name user.username %}'s time {% if num_days is 0 %}today{% else %}{{ date_user|date:"Y-m-d" }}{% endif %}</h2>
+            <div class="block block-rounded">
+               {% if date_entries %}
+                <div class="table-responsive">
+                    <table id="medicineTable" class="table table-striped table-vcenter">
+                    <thead>
+                        <tr>
+                        <th>Index</th>
+                        <th>Project</th>
+                        <th>Task</th>
+                        <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in date_entries %}
+                        <tr>
+                        <td><strong>{{ forloop.counter }}</strong></td>
+                        <td>{{ entry.project.title }}</td>
+                        <td>{{ entry.task.title }}</td>
+                        <td>{{ entry.minutes|format_minutes }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="2"></td>
+                            <td >Total</td>
+                            <td>{{ time_for_user_and_date|format_minutes }}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info text-center" role="alert">No entries available...</div>
+                {% endif %}
+                <a href="?num_days={{ num_days|add:'1' }}" ><i class="fa fa-arrow-alt-circle-left ml-1 opacity-90 font-size-base"></i></a>
+                {% if num_days > 0 %}
+                <a href="?num_days={{ num_days|add:'-1' }}"><i class="fa fa-arrow-alt-circle-right ml-1 opacity-90 font-size-base"></i></a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2>{% firstof user.get_full_name user.username %}'s time {% if user_num_months is 0 %}this month{% else %}{{ user_month|date:"Y-m" }}{% endif %}</h2>
+            <div class="block block-rounded">
+               {% if time_for_user_and_month %}
+                <div class="table-responsive">
+                    <table id="medicineTable" class="table table-striped table-vcenter">
+                    <thead>
+                        <tr>
+                        <th>Index</th>
+                        <th>Project</th>
+                        <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for project in all_projects %}
+                        {% if project.time_for_user_and_project_and_month > 0 %}
+                        <tr>
+                        <td><strong>{{ forloop.counter }}</strong></td>
+                        <td>{{ project.title }}</td>
+                        <td>{{ project.time_for_user_and_project_and_month|format_minutes }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        <tr>
+                            <td></td>
+                            <td>Total</td>
+                            <td>{{ time_for_user_and_month|format_minutes }}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info text-center" role="alert">No entries available...</div>
+                {% endif %}
+                <a href="?user_num_months={{ user_num_months|add:'1' }}"><i class="fa fa-arrow-alt-circle-left ml-1 opacity-90 font-size-base"></i></a>
+                {% if user_num_months > 0 %}
+                <a href="?user_num_months={{ user_num_months|add:'-1' }}"><i class="fa fa-arrow-alt-circle-right ml-1 opacity-90 font-size-base"></i></a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

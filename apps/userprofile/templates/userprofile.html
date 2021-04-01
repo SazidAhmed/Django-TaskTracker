@@ -38,60 +38,35 @@
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
                     <h3 class="text-center">Profile Details</h3>
-                    <form class="mb-5" method="post" action="{% url 'profile_settings' %}">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <input type="text" class="form-control form-control-lg form-control-alt"
-                                id="signup-first_name" name="first_name" value="{{ request.user.first_name }}"
-                                placeholder="First Name">
+                    <div class="row">
+                        <div class="col-lg-5 mt-3">
+                            <img src="{{ request.user.userprofile.get_avatar }}" alt="No Image Found" width="150" height="160">
                         </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control form-control-lg form-control-alt"
-                                id="signup-last_name" name="last_name" value="{{ request.user.last_name }}"
-                                placeholder="Last Name">
+                        <div class="col-lg-7 mt-3">
+                            <h5>First Name : {{ request.user.first_name }}</h5>
+                            <h5>Last Name : {{ request.user.last_name }}</h5>
+                            <h5>Username : {{ request.user.username }}</h5>
+                            <h5>Email : {{ request.user.email }}</h5>
                         </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control form-control-lg form-control-alt"
-                                id="signup-username" name="username" value="{{ request.user.username }}"
-                                placeholder="Username">
-                        </div>
-                        <div class="form-group">
-                            <input type="email" class="form-control form-control-lg form-control-alt" id="signup-email"
-                                name="email" value="{{ request.user.email }}" placeholder="Email">
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-block btn-success">Save</button>
-                        </div>
-                    </form>
+                    </div>
+                    <br><br>
                 </div>
+                <a href="{% url 'profile_settings' %}" class="btn btn-block btn-success">Profile Settings</a>
             </div>
         </div>
         <div class="col-lg-5">
             <div  class="block block-rounded">
+                {% if invitations %}
                 <div class="block-content block-content-full">
-                    <h3 class="text-center">Update Password</h3>
-                    <form class="mb-5" method="post" action="">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <input type="text" class="form-control form-control-lg form-control-alt"
-                                id="signup-first_name" name="old_password"
-                                placeholder="Enter Current Password">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control form-control-lg form-control-alt"
-                                id="signup-first_name" name="new_password1"
-                                placeholder="Enter New Password">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control form-control-lg form-control-alt"
-                                id="signup-last_name" name="new_password2"
-                                placeholder="Enter Confirm Password">
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-block btn-success">Save</button>
-                        </div>
-                    </form>
+                    <h3 class="text-center">Team Invitations</h3>
+                    <div class="row">
+                        {% for invitation in invitations %}
+                            <div class="col-lg-6"><h5>TEAM : {{invitation.team.title}}</h5></div>
+                            <div class="col-lg-6"><a href="{% url 'team:accept_invitation' %}" class="btn btn-sm btn-success"><i class="fa fa-fw fa-check-circle mr-1 font-size-base"></i>Accept</a></div>
+                        {% endfor %}
+                    </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>

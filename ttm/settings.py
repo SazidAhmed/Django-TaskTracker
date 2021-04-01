@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.adminpanel',
     'apps.website',
+    'apps.project',
     'apps.userprofile',
     'apps.team',
 ]
@@ -70,6 +71,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'apps.team.context_processors.active_team',
+                'apps.project.context_processors.active_entry'
             ],
         },
     },
@@ -117,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Dhaka'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -133,11 +135,15 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT =  os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    BASE_DIR / 'static'
 ]
 
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "static"),
+# ]
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 #Messages
 from django.contrib.messages import constants as messages
@@ -149,5 +155,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'oceanta.fashion@gmail.com'
+EMAIL_HOST_USER = 'oceanta.fashion@gmail.com' 
 EMAIL_HOST_PASSWORD = 'OceantaN1Fa$hi0n'
+DEFAULT_EMAIL_FROM = 'oceanta.fashion@gmail.com'
+
+WEBSITE_URL = 'http://127.0.0.1:8000'
+ACCEPTATION_URL = WEBSITE_URL + '/register/'

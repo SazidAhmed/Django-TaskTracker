@@ -1,0 +1,258 @@
+{% extends 'adminpanel/base.html'%}
+{% block content %}
+<div id="time-app">
+<!-- Hero -->
+<div class="bg-body-light">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill h3 my-2">
+                Task : {{ task.title }} 
+                <small class="font-size-base font-w400 text-muted">
+                    <a class="badge badge-pill badge-success"><i class="fa fa-fw fa-check-circle mr-1"></i>{{task.get_status_display}}</a>
+                </small>
+            </h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-alt">
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a class="link-fx" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a class="link-fx" href="{% url 'project:projectList' %}">Project List</a>
+                    </li>
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a class="link-fx" href="{% url 'project:taskList' project.id %}">{{ project.title }}</a>
+                    </li>
+                    <li class="breadcrumb-item" href="">{{ task.title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{% include 'website/alerts.html' %}
+{% if form.errors %}
+    <div class="alert alert-danger text-center" role="alert">
+        {{ form.non_field_errors }}
+            {% for field in form %}
+                {% if field.errors %}{{ field.label }}:{{ field.errors|striptags }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- Page Content -->
+<div class="content" >
+    <a @click.prevent="createModal" href="" data-toggle="modal"  class="btn btn-block btn-success"><i class="fa fa-fw fa-plus-circle mr-1 font-size-base"></i>Register Time</a><br>
+    {% if task.entries.all%}
+    <div class="block-content block-content-full">
+        <h3>Logged Entries</h3>
+        <h6>Total Time : {{ task.registered_time }} Minutes</h6>
+        <div class="table-responsive">
+          <table id="medicineTable" class="table table-striped table-vcenter">
+            <thead>
+              <tr>
+                <th>Index</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>User</th>
+                <th>Modify</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for entry in task.entries.all %}
+              <tr>
+                <td><strong>{{ forloop.counter }}</strong></td>
+                <td>{{ entry.created_at }}</td>
+                <td>{{ entry.minutes }} minutes</td>
+                <td>{% firstof entry.created_by.get_full_name entry.created_by.username %}</td>
+                <td>
+                {% if entry.created_by == request.user %}
+                  <a href="" data-toggle="modal" data-target="#editModal{{ entry.id}}"><i class="fa fa-fw fa-pencil-alt text-primary"></i></a>
+                  <a href="" data-toggle="modal" data-target="#deleteModal{{ entry.id}}"><i class="fa fa-fw fa-trash-alt text-danger"></i></a>
+                {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="block-content block-content-full">
+        <h4 class="text-center">No Entries Yet . . .</h4>
+    </div>
+    {% endif %}
+    <!-- Create modal -->
+    <div class="modal fade" id="CreateModal" tabindex="-1" role="dialog" aria-labelledby="modal-block-slideup" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-slideup" role="document">
+            <form class="mb-5" method="POST" action="{% url 'project:taskDetails' project.id task.id %}" >
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="block block-rounded block-themed block-transparent mb-0">
+                        <div class="block-header bg-primary-dark">
+                            <h3 class="block-title">Register Time</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                    <i class="fa fa-fw fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content font-size-sm">
+                            <div class="block-content font-size-sm">
+                                <div class="row">
+                                    <div class="form-group col-sm-12 col-md-12">
+                                        <label>Date</label>
+                                        <input type="date" class="form-control is-valid"
+                                        name="date" id=id_date value="{{ today|date:'Y-m-d'}}">
+                                    </div>
+                                    <div class="form-group col-sm-6 col-md-6">
+                                        <label>Hours</label>
+                                        <select class="form-control is-valid" name="hours" >
+                                            <option value="0">0h</option>
+                                            {% for i in "x"|rjust:"10" %}
+                                            <option value="{{ forloop.counter }}">{{ forloop.counter }}h</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-sm-6 col-md-6">
+                                        <label>Minutes</label>
+                                        <select class="form-control is-valid" name="minutes" >
+                                            <option value="0">0m</option>
+                                            {% for i in "x"|rjust:"59" %}
+                                            <option value="{{ forloop.counter }}">{{ forloop.counter }}m</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full text-right border-top">
+                            <button type="button" class="btn btn-danger btn-sm btn-square mr-1" data-dismiss="modal">
+                                <i class="fa fa-fw fa-times-circle mr-1 font-size-base"></i>Cancel
+                            </button>
+                            <button type="submit" class="btn btn-success btn-sm btn-square"> 
+                                <i class="fa fa-fw fa-check-circle mr-1 font-size-base"></i>Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% for entry in task.entries.all %}
+     <!-- Edit modal -->
+    <div class="modal fade" id="editModal{{entry.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-block-slideup" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-slideup" role="document">
+            <form class="mb-5" method="POST" action="{% url 'project:entryEdit' project.id task.id entry.id %}">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="block block-rounded block-themed block-transparent mb-0">
+                        <div class="block-header bg-primary-dark">
+                            <h3 class="block-title">Register Time</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                    <i class="fa fa-fw fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content font-size-sm">
+                            <div class="block-content font-size-sm">
+                                <div class="row">
+                                    <div class="form-group col-sm-12 col-md-12">
+                                        <label>Date</label>
+                                        <input type="date" class="form-control is-valid"
+                                        name="date" id=id_date value="{{ entry.created_at|date:'Y-m-d'}}">
+                                    </div>
+                                    <div class="form-group col-sm-6 col-md-6">
+                                        <label>Hours</label>
+                                        <select class="form-control is-valid" name="hours" >
+                                            <option value="0" {% if hours == 0 %} selected {% endif %}>0h</option>
+                                            {% for i in "x"|rjust:"10" %}
+                                            <option value="{{ forloop.counter }}" {% if hours == forloop.counter %} selected {% endif %}>{{ forloop.counter }}h</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-sm-6 col-md-6">
+                                        <label>Minutes</label>
+                                        <select class="form-control is-valid" name="minutes" >
+                                            <option value="0" {% if minutes == 0 %} selected {% endif %}>0m</option>
+                                            {% for i in "x"|rjust:"59" %}
+                                            <option value="{{ forloop.counter }}" {% if minutes == forloop.counter %} selected {% endif %}>{{ forloop.counter }}m</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full text-right border-top">
+                            <button type="button" class="btn btn-danger btn-sm btn-square mr-1" data-dismiss="modal">
+                                <i class="fa fa-fw fa-times-circle mr-1 font-size-base"></i>Cancel
+                            </button>
+                            <button type="submit" class="btn btn-success btn-sm btn-square"> 
+                                <i class="fa fa-fw fa-check-circle mr-1 font-size-base"></i>Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Delete modal -->
+    <div class="modal" id="deleteModal{{entry.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-block-small" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <form class="mb-5" method="post" action="{% url 'project:entryDelete' project.id task.id entry.id %}">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="block block-rounded block-themed block-transparent mb-0">
+                        <div class="block-header bg-primary-dark">
+                            <h3 class="block-title">Warning !!!</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                    <i class="fa fa-fw fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content font-size-sm">
+                            <h3 class="text-center">Entry Of: {{ task.title }}</h3>
+                            <h5 class="text-center">Confirm To Delete.</h5>
+                        </div>
+                        <div class="block-content block-content-full text-right border-top">
+                            <button type="button" class="btn btn-danger btn-sm btn-square mr-1" data-dismiss="modal">
+                                <i class="fa fa-fw fa-times-circle mr-1 font-size-base"></i>Cancel
+                            </button>
+                            <button type="submit" class="btn btn-success btn-sm btn-square"> 
+                                <i class="fa fa-fw fa-check-circle mr-1 font-size-base"></i>Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+<!-- END Page Content -->
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    const ProjectApp = {
+        data() {
+            return {
+                title:'',
+                showError: false,
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+
+            createModal() {
+                $("#CreateModal").modal("show");
+            },
+        }
+    }
+
+    Vue.createApp(ProjectApp).mount('#time-app')
+</script>
+{% endblock %}

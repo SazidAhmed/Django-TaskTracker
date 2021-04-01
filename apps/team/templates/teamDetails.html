@@ -36,11 +36,26 @@
 <div class="content">
     <!-- Active Teams -->
     <h2 class="text-success">Team : {{team.title}}</h2>
-    <div class="row row-deck">
-        Members : 
-       {% for member in team.members.all %}
-        <p>{{member.username}}</p>
-       {% endfor %}
+    {% if request.user == team.created_by %}
+    <a class="font-w500 align-items-center btn btn-success btn-block" href="{% url 'team:invite' %}">
+        <i class="fa fa-fw fa-plus-circle mr-1 opacity-90 font-size-base"></i>Invite Members
+    </a>
+    {% endif %}
+    <div class="container">
+        <br>
+       <h1>Members : </h1>
+       <ul>
+           {% for member in team.members.all %}
+           <li>{{ member.email }} - {{member.username}}</li>
+           {% endfor %}
+       </ul>
+       <br>
+       <h1>Invited Members : </h1>
+       <ul>
+        {% for member in invitations %}
+        <li>{{ member.email }} - {{ member.date_sent|timesince }} ago</li>
+        {% endfor %}
+    </ul>
     </div>
 </div>
 <!-- END Page Content -->

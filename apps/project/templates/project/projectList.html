@@ -1,0 +1,217 @@
+{% extends 'adminpanel/base.html'%}
+{% block content %}
+<div id="project-app">
+<!-- Hero -->
+<div class="bg-body-light">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill h3 my-2">
+                Team : {{ team.title }} 
+                <small class="font-size-base font-w400 text-muted">
+                    <a class="badge badge-pill badge-success"><i class="fa fa-fw fa-check-circle mr-1"></i>Active</a>
+                </small>
+            </h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-alt">
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a class="link-fx" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item" href="{% url 'project:projectList' %}">Project List</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{% include 'website/alerts.html' %}
+{% if form.errors %}
+    <div class="alert alert-danger text-center" role="alert">
+        {{ form.non_field_errors }}
+            {% for field in form %}
+                {% if field.errors %}{{ field.label }}:{{ field.errors|striptags }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- Page Content -->
+<div class="content" >
+    <!-- Projects -->
+    <a @click.prevent="createModal" href="" data-toggle="modal"  class="btn btn-block btn-success"><i class="fa fa-fw fa-plus-circle mr-1 font-size-base"></i>Add New Project</a><br>
+    {% if projects %}
+    <div class="row row-deck">
+        {% for project in projects %}
+            <div class="col-sm-6 col-md-4 col-l-3 col-xl-3">
+                <div class="block block-rounded d-flex flex-column">
+                    <div class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                        <dl class="mb-0">
+                            <dt class="font-size-h2 font-w700">{{ project.title }}</dt>
+                            <dd class="text-muted mb-0">Registered Time: {{ project.registered_time }}</dd>
+                            <dd class="text-muted mb-0">Tasks: {{ project.num_tasks_todo }}</dd>
+                        </dl>
+                        <div class="item item-rounded bg-body"><a href="{% url 'project:taskList' project.id %}" class="card-footer-item">
+                            <i class="fa fa-eye font-size-h3 text-success"></i></a>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full block-content-sm bg-body-light font-size-sm">
+                    {% if project.created_by == request.user %}
+                        <a class="font-w500 align-items-center text-primary btn btn-link" data-toggle="modal" data-target="#editModal{{project.id}}">
+                            Edit
+                            <i class="fa fa-edit ml-1 opacity-50 font-size-base text-primary"></i>
+                        </a>
+                        
+                        <a class="font-w500 align-items-center text-danger btn btn-link" data-toggle="modal" data-target="#deleteModal{{project.id}}">
+                            Delete
+                            <i class="fa fa-trash-alt ml-1 opacity-50 font-size-base text-danger"></i>
+                        </a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">This Team Has No Project Yet . . . </div>
+    {% endif %}
+</div>
+<!-- Create modal -->
+<div class="modal fade" id="CreateProjectModal" tabindex="-1" role="dialog" aria-labelledby="modal-block-slideup" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-slideup" role="document">
+        <form class="mb-5" method="post" action="." @submit="validateForm">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="block block-rounded block-themed block-transparent mb-0">
+                    <div class="block-header bg-primary-dark">
+                        <h3 class="block-title">New Project</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content font-size-sm">
+                        <div class="block-content font-size-sm">
+                            <div class="form-group">
+                                <input type="text" class="form-control is-valid"
+                                name="title" v-model='title' placeholder="Project Title">
+                            </div>
+                            <span class="block-content font-size-sm" v-if=showError>The Title Is Missing</span>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full text-right border-top">
+                        <button type="button" class="btn btn-danger btn-sm btn-square mr-1" data-dismiss="modal">
+                            <i class="fa fa-fw fa-times-circle mr-1 font-size-base"></i>Cancel
+                        </button>
+                        <button type="submit" class="btn btn-success btn-sm btn-square"> 
+                            <i class="fa fa-fw fa-check-circle mr-1 font-size-base"></i>Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% for project in projects %}
+<!-- Edit modal -->
+<div class="modal fade" id="editModal{{project.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-block-slideup" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-slideup" role="document">
+        <form class="mb-5" method="post" action="{% url 'project:projectEdit' project.id %}">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="block block-rounded block-themed block-transparent mb-0">
+                    <div class="block-header bg-primary-dark">
+                        <h3 class="block-title">Edit Here</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content font-size-sm">
+                        <div class="block-content font-size-sm">
+                            <div class="form-group">
+                                <input type="text" class="form-control is-valid"
+                                name="title" value="{{project.title}}" placeholder="Title">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full text-right border-top">
+                        <button type="button" class="btn btn-danger btn-sm btn-square mr-1" data-dismiss="modal">
+                            <i class="fa fa-fw fa-times-circle mr-1 font-size-base"></i>Cancel
+                        </button>
+                        <button type="submit" class="btn btn-success btn-sm btn-square"> 
+                            <i class="fa fa-fw fa-check-circle mr-1 font-size-base"></i>Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Delete modal -->
+<div class="modal" id="deleteModal{{project.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-block-small" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <form class="mb-5" method="post" action="{% url 'project:projectDelete' project.id %}">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="block block-rounded block-themed block-transparent mb-0">
+                    <div class="block-header bg-primary-dark">
+                        <h3 class="block-title">Warning !!!</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content font-size-sm">
+                        <h3 class="text-center">Project : {{ project.title }}</h3>
+                        <h5 class="text-center">Confirm To Delete.</h5>
+                    </div>
+                    <div class="block-content block-content-full text-right border-top">
+                        <button type="button" class="btn btn-danger btn-sm btn-square mr-1" data-dismiss="modal">
+                            <i class="fa fa-fw fa-times-circle mr-1 font-size-base"></i>Cancel
+                        </button>
+                        <button type="submit" class="btn btn-success btn-sm btn-square"> 
+                            <i class="fa fa-fw fa-check-circle mr-1 font-size-base"></i>Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endfor %}
+
+<!-- END Page Content -->
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const ProjectApp = {
+        data() {
+            return {
+                title:'',
+                showError: false,
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            validateForm(e) {
+
+                if (this.title) {
+                    return true
+                }
+                this.showError = true;
+                e.preventDefault();
+                return false
+            },
+
+            createModal() {
+                $("#CreateProjectModal").modal("show");
+            },
+        }
+    }
+
+    Vue.createApp(ProjectApp).mount('#project-app')
+</script>
+{% endblock %}

@@ -1,5 +1,6 @@
 {% load static %}
 <!-- Header -->
+<div id="navbar-app">
 <header id="page-header">
     <!-- Header Content -->
     <div class="content-header">
@@ -54,6 +55,18 @@
 
         <!-- Right Section -->
         <div class="d-flex align-items-center">
+            <!-- Timer -->
+            <div class="dropdown d-inline-block ml-2">
+                <button v-if="!trackingTime" type="button" class="btn btn-sm btn-dual" @click="startTimer()">
+                    <i class="fa fa-fw fa-stopwatch"></i>
+                    <span class="text-success">Start Tracking</span>
+                </button>
+                <button v-else type="button" class="btn btn-sm btn-dual" @click="stopTimer()">
+                    <i class="fa fa-fw fa-stopwatch"></i>
+                    <span class="text-danger">[[ readableSeconds ]] (Stop Tracking)</span>
+                </button>
+            </div>
+            <!-- END Timer -->
             <!-- User Dropdown -->
             <div class="dropdown d-inline-block ml-2">
                 <button type="button" class="btn btn-sm btn-dual d-flex align-items-center"
@@ -65,7 +78,7 @@
                 <div class="dropdown-menu dropdown-menu-md dropdown-menu-right p-0 border-0"
                     aria-labelledby="page-header-user-dropdown">
                     <div class="p-3 text-center bg-primary-dark rounded-top">
-                        <img class="img-avatar img-avatar48 img-avatar-thumb" src="{% static 'avatars/avatar-4.png'%}"
+                        <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ user.userprofile.get_avatar }}"
                             alt="">
                         <p class="mt-2 mb-0 text-white font-w500">{{ user.first_name }} {{ user.last_name }}</p>
                         <p class="mb-0 text-white-50 font-size-sm">{{ user.email }}</p>
@@ -92,45 +105,10 @@
                 </div>
             </div>
             <!-- END User Dropdown -->
-
-            <!-- Notifications Dropdown -->
-            <div class="dropdown d-inline-block ml-2">
-                <button type="button" class="btn btn-sm btn-dual" id="page-header-notifications-dropdown"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-fw fa-bell"></i>
-                    <span class="text-primary">•</span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0 border-0 font-size-sm"
-                    aria-labelledby="page-header-notifications-dropdown">
-                    <div class="p-2 bg-primary-dark text-center rounded-top">
-                        <h5 class="dropdown-header text-uppercase text-white">Notifications</h5>
-                    </div>
-                    <ul class="nav-items mb-0">
-                        <li>
-                            <a class="text-dark media py-2" href="javascript:void(0)">
-                                <div class="mr-2 ml-3">
-                                    <i class="fa fa-fw fa-check-circle text-success"></i>
-                                </div>
-                                <div class="media-body pr-2">
-                                    <div class="font-w600">You have a new follower</div>
-                                    <span class="font-w500 text-muted">15 min ago</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="p-2 border-top">
-                        <a class="btn btn-sm btn-light btn-block text-center" href="javascript:void(0)">
-                            <i class="fa fa-fw fa-arrow-down mr-1"></i> Load More..
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- END Notifications Dropdown -->
         </div>
         <!-- END Right Section -->
     </div>
     <!-- END Header Content -->
-
     <!-- Header Search -->
     <div id="page-header-search" class="overlay-header bg-white">
         <div class="content-header">
@@ -150,9 +128,7 @@
         </div>
     </div>
     <!-- END Header Search -->
-
     <!-- Header Loader -->
-    <!-- Please check out the Loaders page under Components category to see examples of showing/hiding it -->
     <div id="page-header-loader" class="overlay-header bg-white">
         <div class="content-header">
             <div class="w-100 text-center">
@@ -162,4 +138,141 @@
     </div>
     <!-- END Header Loader -->
 </header>
+    <!-- modal -->
+    <div class="modal fade" id="showTrackingModal"  tabindex="-1" role="dialog" aria-labelledby="modal-block-slideup" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-slideup" role="document">
+            <div class="modal-content">
+                <div class="block block-rounded block-themed block-transparent mb-0">
+                    <div class="block-header bg-primary-dark">
+                        <h3 class="block-title">Tracked time</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content font-size-sm">
+                        <div class="block-content font-size-sm">
+                            <p>You have tracked [[ readableSeconds ]]</p>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full text-right border-top">
+                        <button @click="addToTask()" type="button" class="btn btn-success btn-sm btn-square mr-1">
+                            <i class="fa fa-fw fa-times-circle mr-1 font-size-base"></i>Add To Task
+                        </button>
+                        <button @click="addLater()" type="submit" class="btn btn-info btn-sm btn-square mr-1"> 
+                            <i class="fa fa-fw fa-check-circle mr-1 font-size-base"></i>Add Later
+                        </button>
+                        <button @click="discardTimer()" type="submit" class="btn btn-danger btn-sm btn-square"> 
+                            <i class="fa fa-fw fa-check-circle mr-1 font-size-base"></i>Discard
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- END Header -->
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    var NavbarApp = {
+        data() {
+            return {
+                seconds: {{ active_entry_seconds }},
+                trackingTime: false,
+                showTrackingModal: false,
+                timer: null,
+                entryID: 0,
+                startTime: '{{ start_time }}'
+            }
+        },
+        delimiters: ['[[', ']]'],
+        mounted() {
+            if (this.seconds !== 0) {
+                this.trackingTime = true
+                this.timer = setInterval(() => {
+                    this.seconds = (new Date() - new Date(this.startTime)) / 1000
+                }, 1000)
+            }
+        },
+        methods: {
+            startTimer() {
+                fetch('/adminpanel/projects/api/start_timer/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then((response) => {
+                    return response.json()
+                })
+                .then((result) => {
+                    this.startTime = new Date()
+                    this.trackingTime = true
+                    this.timer = setInterval(() => {
+                        this.seconds = (new Date() - this.startTime) / 1000
+                    }, 1000)
+                })
+            },
+            stopTimer() {
+                fetch('/adminpanel/projects/api/stop_timer/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then((response) => {
+                    return response.json()
+                })
+                .then((result) => {
+                    console.log(result)
+                    this.entryID = result.entryID
+                    $("#showTrackingModal").modal("show");
+                    this.trackingTime = false
+
+                    window.clearTimeout(this.timer)
+                })
+            },
+            discardTimer() {
+                fetch('/adminpanel/projects/api/discard_timer/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then((response) => {
+                    this.seconds = 0
+                    $("#showTrackingModal").modal("hide");
+                })
+            },
+            addLater() {
+                this.seconds = 0
+                $("#showTrackingModal").modal("hide");
+                location.reload();
+            },
+            addToTask() {
+                console.log('addToTask')
+                window.location.href = '/adminpanel/projects/track_entry/' + this.entryID + '/'
+            }
+        },
+        computed: {
+            readableSeconds() {
+                const d = Number(this.seconds);
+                const h = Math.floor(d / 3600);
+                const m = Math.floor(d % 3600 / 60);
+                const s = Math.floor(d % 3600 % 60);
+
+                const hDisplay = h > 0 ? h + (h == 1 ? "h, " : "h, ") : "";
+                const mDisplay = m > 0 ? m + (m == 1 ? "m, " : "m, ") : "";
+                const sDisplay = s >= 0 ? s + (s == 1 ? "s" : "s") : "";
+
+                return hDisplay + mDisplay + sDisplay; 
+            }
+        }
+    }
+
+    Vue.createApp(NavbarApp).mount('#navbar-app')
+</script>

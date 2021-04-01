@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import views
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
+#static
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -29,9 +30,6 @@ urlpatterns = [
 
     # Adminpanel Urls
     path('adminpanel/', include('apps.adminpanel.urls')),
-
-    #Team Urls
-    path('teams/', include('apps.team.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

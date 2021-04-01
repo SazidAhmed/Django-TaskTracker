@@ -5,6 +5,7 @@ from django.contrib import messages, auth
 from django.contrib.auth.models import User
 
 from apps.userprofile.models import Userprofile
+from apps.team.models import Invitation
 
 
 def frontpage(request):
@@ -39,9 +40,13 @@ def register(request):
           # return redirect('dashboard')
           user.save()
           userprofile = Userprofile.objects.create(user=user)
-          messages.success(request, 'You Are Now Registered And Can Log In!')
-          return redirect('login')
-
+          invitations = Invitation.objects.filter(email=user.email, status=Invitation.INVITED)
+          if invitations:
+            auth.login(request, user)
+            return redirect('team:accept_invitation')
+          else:
+            messages.success(request, 'You Are Registered And Can Log In!')
+            return redirect('login')
     else:
       messages.error(request, 'Password Do No Matched!')
       return redirect('register')
