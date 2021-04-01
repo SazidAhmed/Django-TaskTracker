@@ -1,4 +1,5 @@
 {% extends 'adminpanel/base.html'%}
+{% load dashboardextras %}
 {% block content %}
 <!-- Hero -->
 <div class="bg-body-light">
@@ -28,8 +29,8 @@
                 <div
                     class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
                     <dl class="mb-0">
-                        <dt class="font-size-h2 font-w700">5</dt>
-                        <dd class="text-muted mb-0">Categories</dd>
+                        <dt class="font-size-h2 font-w700">2</dt>
+                        <dd class="text-muted mb-0">Teams</dd>
                     </dl>
                     <div class="item item-rounded bg-body">
                         <i class="fa fa-shopping-cart font-size-h3 text-primary"></i>
@@ -49,7 +50,7 @@
                     class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
                     <dl class="mb-0">
                         <dt class="font-size-h2 font-w700">5</dt>
-                        <dd class="text-muted mb-0">Manufactures</dd>
+                        <dd class="text-muted mb-0">Projects</dd>
                     </dl>
                     <div class="item item-rounded bg-body">
                         <i class="fa fa-users font-size-h3 text-primary"></i>
@@ -68,8 +69,8 @@
                 <div
                     class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
                     <dl class="mb-0">
-                        <dt class="font-size-h2 font-w700">5</dt>
-                        <dd class="text-muted mb-0">Products</dd>
+                        <dt class="font-size-h2 font-w700">50</dt>
+                        <dd class="text-muted mb-0">Tasks</dd>
                     </dl>
                     <div class="item item-rounded bg-body">
                         <i class="fa fa-inbox font-size-h3 text-primary"></i>
@@ -89,8 +90,8 @@
                 <div
                     class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
                     <dl class="mb-0">
-                        <dt class="font-size-h2 font-w700">5</dt>
-                        <dd class="text-muted mb-0">Customers</dd>
+                        <dt class="font-size-h2 font-w700">30</dt>
+                        <dd class="text-muted mb-0">Completed</dd>
                     </dl>
                     <div class="item item-rounded bg-body">
                         <i class="fa fa-inbox font-size-h3 text-primary"></i>
@@ -105,34 +106,193 @@
             </div>
         </div>
     </div>
+    <h2>Newest projects</h2>
+    <div class="row row-deck">
+        {% for project in projects %}
+        <div class="col-6 col-sm-3 col-xl-3">
+            <div class="block block-rounded d-flex flex-column">
+                <div
+                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                    <dl class="mb-0">
+                        <dt class="font-size-h2 font-w700">{{ project.title }}</dt>
+                        <dd class="text-muted mb-0">Registered time: {{ project.registered_time|format_minutes }}</dd>
+                        <dd class="text-muted mb-0">Tasks: {{ project.num_tasks_todo }}</dd>
+                    </dl>
+                    <div class="item item-rounded bg-body">
+                        <i class="fa fa-shopping-cart font-size-h3 text-primary"></i>
+                    </div>
+                </div>
+                <div class="block-content block-content-full block-content-sm bg-body-light font-size-sm">
+                    <a class="font-w500 d-flex align-items-center"  href="{% url 'project:taskList' project.id %}">
+                        View Tasks
+                        <i class="fa fa-arrow-alt-circle-right ml-1 opacity-25 font-size-base"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <p>No projects yet...</p>
+        {% endfor %}
+    </div>
 
     <!-- END Overview -->
-    <!-- Charts -->
     <div class="row">
         <div class="col-md-6">
+            <h2>Time Of {% if num_days is 0 %}today{% else %}{{ date_user|date:"Y-m-d" }}{% endif %}</h2>
             <div class="block block-rounded">
-               
+               {% if date_entries %}
+                <div class="table-responsive">
+                    <table id="medicineTable" class="table table-striped table-vcenter">
+                    <thead>
+                        <tr>
+                        <th>Index</th>
+                        <th>Project</th>
+                        <th>Task</th>
+                        <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in date_entries %}
+                        <tr>
+                        <td><strong>{{ forloop.counter }}</strong></td>
+                        <td>{{ entry.project.title }}</td>
+                        <td>{{ entry.task.title }}</td>
+                        <td>{{ entry.minutes|format_minutes }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="2"></td>
+                            <td >Total</td>
+                            <td>{{ time_for_user_and_date|format_minutes }}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info text-center" role="alert">No entries available...</div>
+                {% endif %}
+                <a href="?num_days={{ num_days|add:'1' }}" ><i class="fa fa-arrow-alt-circle-left ml-1 opacity-90 font-size-base"></i></a>
+                {% if num_days > 0 %}
+                <a href="?num_days={{ num_days|add:'-1' }}"><i class="fa fa-arrow-alt-circle-right ml-1 opacity-90 font-size-base"></i></a>
+                {% endif %}
             </div>
         </div>
         <div class="col-md-6">
+            <h2>Time Of {% if user_num_months is 0 %}this month{% else %}{{ user_month|date:"Y-m" }}{% endif %}</h2>
             <div class="block block-rounded">
-                
+               {% if time_for_user_and_month %}
+                <div class="table-responsive">
+                    <table id="medicineTable" class="table table-striped table-vcenter">
+                    <thead>
+                        <tr>
+                        <th>Index</th>
+                        <th>Project</th>
+                        <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for project in all_projects %}
+                        {% if project.time_for_user_and_project_and_month > 0 %}
+                        <tr>
+                        <td><strong>{{ forloop.counter }}</strong></td>
+                        <td>{{ project.title }}</td>
+                        <td>{{ project.time_for_user_and_project_and_month|format_minutes }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        <tr>
+                            <td></td>
+                            <td>Total</td>
+                            <td>{{ time_for_user_and_month|format_minutes }}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info text-center" role="alert">No entries available...</div>
+                {% endif %}
+                <a href="?user_num_months={{ user_num_months|add:'1' }}"><i class="fa fa-arrow-alt-circle-left ml-1 opacity-90 font-size-base"></i></a>
+                {% if user_num_months > 0 %}
+                <a href="?user_num_months={{ user_num_months|add:'-1' }}"><i class="fa fa-arrow-alt-circle-right ml-1 opacity-90 font-size-base"></i></a>
+                {% endif %}
             </div>
         </div>
+        <!-- Team Entries -->
+        {% if request.user == team.created_by %}
+        <div class="col-md-6">
+            <h2>Time Of Team For {% if team_num_months is 0 %}this month{% else %}{{ team_month|date:"Y-m" }}{% endif %}</h2>
+            <div class="block block-rounded">
+               {% if time_for_team_and_month > 0 %}
+                <div class="table-responsive">
+                    <table id="medicineTable" class="table table-striped table-vcenter">
+                        <thead>
+                            <tr>
+                                <th>Index</th>
+                                <th>Name</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for member in members %}
+                                <tr>
+                                    <td><strong>{{ forloop.counter }}</strong></td>
+                                    <td><a href="{% url 'view_user' member.id %}">{% firstof member.get_full_name member.username %}</a></td>
+                                    <td>{{ member.time_for_user_and_team_and_month|format_minutes }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                    <p>No registred time for your team this month...</p>
+                {% endif %}
+                <a href="?team_num_months={{ team_num_months|add:'1' }}"><i class="fa fa-arrow-alt-circle-left ml-1 opacity-90 font-size-base"></i></a>
+                {% if team_num_months > 0 %}
+                <a href="?team_num_months={{ team_num_months|add:'-1' }}"><i class="fa fa-arrow-alt-circle-right ml-1 opacity-90 font-size-base"></i></a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        <!-- Untracked Entries -->
+        {% if untracked_entries %}
+        <div class="col-md-6">
+            <h2>Your Untracked Entries</h2>
+            <div class="block block-rounded">
+                <div class="table-responsive">
+                    <table id="medicineTable" class="table table-striped table-vcenter">
+                    <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Started</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Add to task</th>
+                            <th>Discard</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in untracked_entries %}
+                        <tr>
+                            <td><strong>{{ forloop.counter }}</strong></td>
+                            <td>{{ entry.created_at }}</td>
+                            <td>
+                                {% if entry.minutes == 0 %}
+                                    {{ entry.minutes_since|format_minutes }}
+                                {% else %}
+                                    {{ entry.minutes|format_minutes }}
+                                {% endif %}
+                            </td>
+                            <td>{% if entry.minutes == 0 %}In progress{% else %}Untracked{% endif %}</td>
+                            <td><a href="{% url 'project:track_entry' entry.id %}">Add to task</a></td>
+                            <td><a href="{% url 'project:untrackedEntryDelete' entry.id %}">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="block block-rounded">
- 
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="block block-rounded">
-
-            </div>
-        </div>
-    </div>
-    
-   
 </div>
 {% endblock %}

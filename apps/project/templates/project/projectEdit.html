@@ -1,0 +1,72 @@
+{% extends 'adminpanel/base.html'%}
+{% block content %}
+<div id="project-app">
+<!-- Hero -->
+<div class="bg-body-light">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill h3 my-2">
+                {{ project.title }}
+            </h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-alt">
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a class="link-fx" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a class="link-fx" href="{% url 'project:projectList' %}">Project List</a>
+                    </li>
+                    <li class="breadcrumb-item" href="">{{ project.title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{% include 'website/alerts.html' %}
+{% if form.errors %}
+    <div class="alert alert-danger text-center" role="alert">
+        {{ form.non_field_errors }}
+            {% for field in form %}
+                {% if field.errors %}{{ field.label }}:{{ field.errors|striptags }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- Page Content -->
+<div class="content" >
+    <!-- Projects -->
+    <form class="mb-5" method="post" action=".">
+        {% csrf_token %}
+        <div class="modal-content">
+            <div class="block block-rounded block-themed block-transparent mb-0">
+                <div class="block-header bg-primary-dark">
+                    <h3 class="block-title">Edit Project</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content font-size-sm">
+                    <div class="block-content font-size-sm">
+                        <div class="form-group">
+                            <input type="text" class="form-control is-valid"
+                            name="title" value="{{project.title}}" placeholder="Project Title">
+                        </div>
+                    </div>
+                </div>
+                <div class="block-content block-content-full text-right border-top">
+                    <button type="button" class="btn btn-danger btn-sm btn-square mr-1" data-dismiss="modal">
+                        <i class="fa fa-fw fa-times-circle mr-1 font-size-base"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-success btn-sm btn-square"> 
+                        <i class="fa fa-fw fa-check-circle mr-1 font-size-base"></i>Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+<!-- END Page Content -->
+</div>
+{% endblock %}

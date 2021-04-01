@@ -1,0 +1,92 @@
+{% extends 'adminpanel/base.html'%}
+{% block content %}
+<div id="team-app">
+<!-- Hero -->
+<div class="bg-body-light">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill h3 my-2">
+            </h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-alt">
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a class="link-fx" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a class="link-fx" href="{% url 'team:accept_invitation' %}">Accept Invitation</a>
+                    </li>
+                    <li class="breadcrumb-item" href="{% url 'team:teamList' %}">Team List</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{% include 'website/alerts.html' %}
+{% if form.errors %}
+    <div class="alert alert-danger text-center" role="alert">
+        {{ form.non_field_errors }}
+            {% for field in form %}
+                {% if field.errors %}{{ field.label }}:{{ field.errors|striptags }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+<!-- Page Content -->
+<div class="content" id="active-code">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="block block-rounded">
+                <div class="block-content block-content-full">
+                    <h3 class="text-center">Accept Invitation</h3>
+                    <form class="mb-5" method="post" action="." @submit="validateForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-lg form-control-alt"
+                                id="id_code" name="code" v-model="code" placeholder="Insert Activation Code">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-block btn-success">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="alert alert-danger text-left" role="alert" v-if="errors.length">
+                    <ul v-for="error in errors">
+                        [[ error ]]
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    const TeamApp = {
+        data() {
+            return {
+                code: '',
+                errors: []
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            validateForm(e) {
+                this.errors = []
+
+                if (this.code) {
+                    return true
+                }
+
+                e.preventDefault()
+
+                this.errors.push('Activation code is missing')
+                
+                return false
+            }
+        }
+    }
+
+    Vue.createApp(TeamApp).mount('#active-code')
+</script>
+{% endblock %}
