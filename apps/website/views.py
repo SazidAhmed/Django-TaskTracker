@@ -12,5 +12,5 @@ def about(request):
 def contact(request):
   return render(request, 'contact.html')
 
-def plans(request):
-  return render(request, 'plans.html')
+def membership(request):
+  return render(request, 'membership.html')

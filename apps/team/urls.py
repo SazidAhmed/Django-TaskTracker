@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .views import teamAdd, teamList, teamDetails, teamEdit, activeTeamEdit, activate_team, deleteTeam, invite, accept_invitation
+from .views import teamAdd, teamList, teamDetails, teamEdit, activeTeamEdit, activate_team, deleteTeam, invite, accept_invitation, plans
 
 #name Space
 app_name = 'team'
@@ -17,4 +17,6 @@ urlpatterns = [
 
     path('invite/', invite, name='invite'),
     path('accept_invitation/', accept_invitation, name='accept_invitation'),
+
+    path('plans/', plans, name='plans'),
 ]

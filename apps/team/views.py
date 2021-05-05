@@ -158,11 +158,13 @@ def accept_invitation(request):
         return render(request, 'email/accept_invitaion.html')
 
 
+@login_required
+def plans(request):
+    team = get_object_or_404(Team, pk=request.user.userprofile.active_team_id, status=Team.ACTIVE)
 
+    context = {
+        'team': team,
+    }
 
-
-
-
-
-
+    return render(request, 'plans.html', context)
 
