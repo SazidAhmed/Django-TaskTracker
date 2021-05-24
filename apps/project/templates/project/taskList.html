@@ -38,9 +38,20 @@
 
 <!-- Page Content -->
 <div class="content" >
-    <a @click.prevent="createModal" href="" data-toggle="modal"  class="btn btn-block btn-success"><i class="fa fa-fw fa-plus-circle mr-1 font-size-base"></i>Add New Task</a><br>
+    {% if team.plan.max_tasks_per_project > project.tasks.count %}
+    <a @click.prevent="createModal" href="" data-toggle="modal" class="btn btn-block btn-success"><i class="fa fa-fw fa-plus-circle mr-1 font-size-base"></i>Add New Task</a><br>
     <!-- Projects -->
-    
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        <h3>This Team has reached the limit of tasks for this project.</h3>
+        {% if team.created_by == request.user %}
+            <a href="{% url 'team:plans' %}" class="btn btn-block btn-success">Upgrade Plan</a>
+        {% else %}
+            <p>Contact your team leader . . .</p>
+        {% endif %}
+    </div>
+    {% endif %}
+
     {% if not tasks_todo and not tasks_done %}
         <div class="alert alert-info text-center" role="alert">No Tasks Yet . . . </div>
     {% endif %}

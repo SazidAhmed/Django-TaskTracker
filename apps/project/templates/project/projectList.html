@@ -36,7 +36,20 @@
 <!-- Page Content -->
 <div class="content" >
     <!-- Projects -->
-    <a @click.prevent="createModal" href="" data-toggle="modal"  class="btn btn-block btn-success"><i class="fa fa-fw fa-plus-circle mr-1 font-size-base"></i>Add New Project</a><br>
+    {% if team.plan.max_projects_per_team > team.projects.count %}
+    <a @click.prevent="createModal" href="" data-toggle="modal" class="btn btn-block btn-success"><i class="fa fa-fw fa-plus-circle mr-1 font-size-base"></i>Add New Project</a><br>
+    <!-- Projects -->
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        <h3>This Team has reached the limit of projects.</h3>
+        {% if team.created_by == request.user %}
+            <a href="{% url 'team:plans' %}" class="btn btn-block btn-success">Upgrade Plan</a>
+        {% else %}
+            <p>Contact your team leader . . .</p>
+        {% endif %}
+    </div>
+    {% endif %}
+    
     {% if projects %}
     <div class="row row-deck">
         {% for project in projects %}

@@ -44,21 +44,28 @@
         <i class="fa fa-fw fa-plus-circle mr-1 opacity-90 font-size-base"></i>Change Plan
     </a>
     {% endif %}
-    <div class="container">
-        <br>
-       <h1>Members : </h1>
-       <ul>
-           {% for member in team.members.all %}
-           <li>{{ member.email }} - {{member.username}}</li>
-           {% endfor %}
-       </ul>
-       <br>
-       <h1>Invited Members : </h1>
-       <ul>
-        {% for member in invitations %}
-        <li>{{ member.email }} - {{ member.date_sent|timesince }} ago</li>
-        {% endfor %}
-    </ul>
+    <br><br>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-l-6 col-xl-6">
+            {% if team.members %}
+            <h1>Team Members : </h1>
+            <ul>
+                {% for member in team.members.all %}
+                <li>{{ member.email }} - {{member.username}}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="col-sm-6 col-md-6 col-l-6 col-xl-6">
+            {% if invitations %}
+            <h1>Pending Invitions : </h1>
+            <ul>
+                {% for member in invitations %}
+                <li>{{ member.email }} - {{ member.date_sent|timesince }} ago</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
     </div>
 </div>
 <!-- END Page Content -->

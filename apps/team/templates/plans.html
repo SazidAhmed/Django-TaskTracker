@@ -21,61 +21,131 @@
     </div>
 </div>
 
-  <div class="content">
-      <div class="row">
-          <div class="col-md-6 col-xl-3 js-appear-enabled animated fadeInUp" data-toggle="appear" data-offset="50" data-class="animated fadeInUp">
-              <!-- Developer Plan -->
-              <a class="block block-rounded block-link-shadow block-themed block-fx-shadow text-center">
-                  <div class="block-header">
-                      <h3 class="block-title">Basic</h3>
-                  </div>
-                  <div class="block-content bg-body-light">
-                      <div class="py-2">
-                          <p class="h1 font-w700 mb-2">$0</p>
-                          <p class="h6 text-muted">per month</p>
-                      </div>
-                  </div>
-                  <div class="block-content">
-                      <div class="font-size-sm py-2">
-                          <p>
-                              <strong>5</strong> Categories
-                          </p>
-                          <p>
-                              <strong>20</strong> Bookmarks
-                          </p>
-                            <p>
-                              <strong>No</strong> Support
-                          </p>
-                      </div>
-                  </div>
-                    <div class="block-content block-content-full bg-body-light">
-                      <span class="btn btn-secondary px-4" >Sign In</span>
-                    </div>
-              </a>
-              <!-- END Developer Plan -->
-          </div>
-          <div class="col-md-6 col-xl-3 js-appear-enabled animated fadeInUp" data-toggle="appear" data-offset="50" data-timeout="200" data-class="animated fadeInUp">
-              <!-- Startup Plan -->
-                <div class="block block-rounded block-link-shadow block-themed block-fx-shadow text-center">
+    <div class="content" id="plans-app">
+        <div class="row">
+            <div class="col-md-6 col-xl-3 js-appear-enabled animated fadeInUp" data-toggle="appear" data-offset="50" data-class="animated fadeInUp">
+                <!-- Developer Plan -->
+                <a class="block block-rounded block-link-shadow block-themed block-fx-shadow text-center">
                     <div class="block-header">
-                        <h3 class="block-title">Pro</h3>
+                        <h3 class="block-title">Free</h3>
                     </div>
                     <div class="block-content bg-body-light">
                         <div class="py-2">
-                            <p class="h1 font-w700 mb-2">$5</p>
+                            <p class="h1 font-w700 mb-2">$0</p>
                             <p class="h6 text-muted">per month</p>
                         </div>
                     </div>
                     <div class="block-content">
                         <div class="font-size-sm py-2">
                             <p>
-                                <strong>5</strong> Categories
+                                <strong>1</strong> Project
                             </p>
                             <p>
-                                <strong>50</strong> Bookmarks
+                                <strong>5</strong> Members
                             </p>
                             <p>
-                                <strong>Basic</strong> Support
+                                <strong>10</strong> Tasks
+                            </p>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full bg-body-light"></div>
+                </a>
+                <!-- END Developer Plan -->
+            </div>
+            <div class="col-md-6 col-xl-3 js-appear-enabled animated fadeInUp" data-toggle="appear" data-offset="50" data-timeout="200" data-class="animated fadeInUp">
+                <!-- Startup Plan -->
+                    <div class="block block-rounded block-link-shadow block-themed block-fx-shadow text-center">
+                        <div class="block-header">
+                            <h3 class="block-title">Basic</h3>
+                        </div>
+                        <div class="block-content bg-body-light">
+                            <div class="py-2">
+                                <p class="h1 font-w700 mb-2">$5</p>
+                                <p class="h6 text-muted">per month</p>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            <div class="font-size-sm py-2">
+                                <p>
+                                    <strong>5</strong> Project
+                                </p>
+                                <p>
+                                    <strong>10</strong> Members
+                                </p>
+                                <p>
+                                    <strong>30</strong> Tasks Per Project
+                                </p>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full bg-body-light">
+                            {% if team.plan.title == 'Basic' %}
+                            <sapn href="?cancel_plan=true"  class="btn btn-danger px-4">Cancel</span>
+                            {% else %}
+                            <span @click="subscribe('basic')"  class="btn btn-primary px-4">Start</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                
+                <!-- END Startup Plan -->
+            </div>
+            <div class="col-md-6 col-xl-3 js-appear-enabled animated fadeInUp" data-toggle="appear" data-offset="50" data-timeout="200" data-class="animated fadeInUp">
+                <!-- Startup Plan -->
+                <div class="block block-rounded block-link-shadow block-themed block-fx-shadow text-center">
+                    <div class="block-header">
+                        <h3 class="block-title">Pro</h3>
+                    </div>
+                    <div class="block-content bg-body-light">
+                        <div class="py-2">
+                            <p class="h1 font-w700 mb-2">$10</p>
+                            <p class="h6 text-muted">per month</p>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <div class="font-size-sm py-2">
+                            <p>
+                                <strong>10</strong> Project
+                            </p>
+                            <p>
+                                <strong>20</strong> Members
+                            </p>
+                            <p>
+                                <strong>100</strong> Tasks Per Project
+                            </p>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full bg-body-light">
+                        {% if team.plan.title == 'Pro' %}
+                        <sapn href="?cancel_plan=true"  class="btn btn-danger px-4">Cancel</span>
+                        {% else %}
+                        <span @click="subscribe('pro')"  class="btn btn-primary px-4">Start</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- END Startup Plan -->
+            </div>
+            <div class="col-md-6 col-xl-3 js-appear-enabled animated fadeInUp" data-toggle="appear" data-offset="50" data-timeout="200" data-class="animated fadeInUp">
+                <!-- Startup Plan -->
+                <div class="block block-rounded block-link-shadow block-themed block-fx-shadow text-center">
+                    <div class="block-header">
+                        <h3 class="block-title">Ultimate</h3>
+                    </div>
+                    <div class="block-content bg-body-light">
+                        <div class="py-2">
+                            <p class="h1 font-w700 mb-2">$?</p>
+                            <p class="h6 text-muted">per month</p>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <div class="font-size-sm py-2">
+                            <p>
+                                <strong>Need More</strong> Projects?
+                            </p>
+                            <p>
+                                <strong>Need More</strong> Members?
+                            </p>
+                            <p>
+                                <strong>Need More</strong> Tasks?
                             </p>
                         </div>
                     </div>
@@ -83,176 +153,35 @@
                         {% if team.plan.title == 'Basic' %}
                         <sapn href="?cancel_plan=true"  class="btn btn-danger px-4">Cancel</span>
                         {% else %}
-                        <span @click="subscribe('basic')"  class="btn btn-primary px-4">Start</span>
+                        <span @click="subscribe('contact')"  class="btn btn-primary px-4">Contact Us</span>
                         {% endif %}
                     </div>
                 </div>
-               
-              <!-- END Startup Plan -->
-          </div>
-          <div class="col-md-6 col-xl-3 js-appear-enabled animated fadeInUp" data-toggle="appear" data-offset="50" data-timeout="200" data-class="animated fadeInUp">
-            <!-- Startup Plan -->
-              <div class="block block-rounded block-link-shadow block-themed block-fx-shadow text-center">
-                  <div class="block-header">
-                      <h3 class="block-title">Pro</h3>
-                  </div>
-                  <div class="block-content bg-body-light">
-                      <div class="py-2">
-                          <p class="h1 font-w700 mb-2">$5</p>
-                          <p class="h6 text-muted">per month</p>
-                      </div>
-                  </div>
-                  <div class="block-content">
-                      <div class="font-size-sm py-2">
-                          <p>
-                              <strong>5</strong> Categories
-                          </p>
-                          <p>
-                              <strong>50</strong> Bookmarks
-                          </p>
-                          <p>
-                              <strong>Basic</strong> Support
-                          </p>
-                      </div>
-                  </div>
-                  <div class="block-content block-content-full bg-body-light">
-                      {% if team.plan.title == 'Basic' %}
-                      <sapn href="?cancel_plan=true"  class="btn btn-danger px-4">Cancel</span>
-                      {% else %}
-                      <span @click="subscribe('basic')"  class="btn btn-primary px-4">Start</span>
-                      {% endif %}
-                  </div>
-              </div>
-             
-            <!-- END Startup Plan -->
+                
+                <!-- END Startup Plan -->
+            </div>
         </div>
-        <div class="col-md-6 col-xl-3 js-appear-enabled animated fadeInUp" data-toggle="appear" data-offset="50" data-timeout="200" data-class="animated fadeInUp">
-            <!-- Startup Plan -->
-              <div class="block block-rounded block-link-shadow block-themed block-fx-shadow text-center">
-                  <div class="block-header">
-                      <h3 class="block-title">Pro</h3>
-                  </div>
-                  <div class="block-content bg-body-light">
-                      <div class="py-2">
-                          <p class="h1 font-w700 mb-2">$5</p>
-                          <p class="h6 text-muted">per month</p>
-                      </div>
-                  </div>
-                  <div class="block-content">
-                      <div class="font-size-sm py-2">
-                          <p>
-                              <strong>5</strong> Categories
-                          </p>
-                          <p>
-                              <strong>50</strong> Bookmarks
-                          </p>
-                          <p>
-                              <strong>Basic</strong> Support
-                          </p>
-                      </div>
-                  </div>
-                  <div class="block-content block-content-full bg-body-light">
-                      {% if team.plan.title == 'Basic' %}
-                      <sapn href="?cancel_plan=true"  class="btn btn-danger px-4">Cancel</span>
-                      {% else %}
-                      <span @click="subscribe('basic')"  class="btn btn-primary px-4">Start</span>
-                      {% endif %}
-                  </div>
-              </div>
-             
-            <!-- END Startup Plan -->
-        </div>
-      </div>
-  </div>
-  <script>
-    import axios from 'axios'
-    import { toast } from 'bulma-toast'
-    
-    export default {
-        name: 'CreatePost',
-         data(){
-            return{
-                name: '',
-                description: '',
-                price: '',
-                category: '',
-                errors: [],
-                categoryList: []
-            }
-        },
-        mounted() {
-            this.getCategoryList()
-            document.title = 'Creating post | PLACE'
-        },
-        methods: {
-            getCategoryList() {
-                axios
-                .get('/api/v1/category-list/')
-                .then(response => {
-                    this.categoryList = response.data
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-    
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const PlansApp = {
+            data() {
+                return {
+                }
             },
-            submitForm(){
-                this.errors = []
-    
-                if (this.name === ''){
-                    this.errors.push('Title input is requiered.')
-                }
-    
-                if (this.description === ''){
-                    this.errors.push('Description input is requiered.')
-                }
-    
-                if (this.price === ''){
-                    this.errors.push('Price input is requiered.')
-                }
-    
-                if (!this.errors.length){
-                    const config = {
-                        headers: {
-                        "content-type": "multipart/form-data",
-                        },
-                    };
-                    let formData = new FormData();
-                    formData.append("name", this.name);
-                    formData.append("category", this.category);
-                    formData.append("price", this.price);
-                    formData.append("description", this.description);
-    
-                    axios
-                        .post("/api/v1/create-post/", formData, config)
-                        .then(response => {
-                            toast({
-                                message: 'Post created!',
-                                type: 'is-success',
-                                dismissible: true,
-                                pauseOnHover: true,
-                                duration: 2000,
-                                position: 'bottom-right',
-                            })
-    
-                            this.$router.push('/my-account')
-                        })
-                        .catch(error =>{
-                            if (error.response){
-                                for (const property in error.response.data) {
-                                    this.errors.push(`${property}: ${error.response.data[property]}`)
-                                }
-    
-                                console.log(JSON.stringify(error.response.data))
-                            }else if (error.message){
-                                this.errors.push('Something bad happened...')
-                                
-                                console.log(JSON.stringify(error))
-                            }
-                        })
+            delimiters: ['[[', ']]'],
+            methods: {
+                subscribe(plan) {
+                    console.log('Subscribe:', plan);
+
+                    
                 }
             }
         }
-    }
+
+        Vue.createApp(PlansApp).mount('#plans-app')
     </script>
 {% endblock %}
