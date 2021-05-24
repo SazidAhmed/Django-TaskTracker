@@ -38,6 +38,7 @@
 <div class="content" id="invite-app">
     <div class="row">
         <div class="col-lg-12">
+            {% if team.plan.max_members_per_team > team.members.count %}
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
                     <h3 class="text-center">Invite Member</h3>
@@ -58,6 +59,17 @@
                     </ul>
                 </div>
             </div>
+            {% else %}
+            <div class="alert alert-info text-center" role="alert">
+                <h3>This Team has reached the limit of projects.</h3>
+                {% if team.created_by == request.user %}
+                    <a href="{% url 'team:plans' %}" class="btn btn-block btn-success">Upgrade Plan</a>
+                {% else %}
+                    <p>Contact your team leader . . .</p>
+                {% endif %}
+            </div>
+            {% endif %}
+            
         </div>
     </div>
 </div>
