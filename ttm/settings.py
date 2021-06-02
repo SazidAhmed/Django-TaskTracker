@@ -172,7 +172,10 @@ EMAIL_HOST_USER = 'sazidahmed.official@gmail.com'
 EMAIL_HOST_PASSWORD = 'mregmwistizxkqut'
 DEFAULT_EMAIL_FROM = 'oceanta.fashion@gmail.com'
 
-WEBSITE_URL = 'http://127.0.0.1:8000'
+# WEBSITE_URL = 'http://127.0.0.1:8000'
+# ACCEPTATION_URL = WEBSITE_URL + '/register/'
+
+WEBSITE_URL = 'https://project-shiopa.herokuapp.com'
 ACCEPTATION_URL = WEBSITE_URL + '/register/'
 
 
