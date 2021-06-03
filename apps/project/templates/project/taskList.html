@@ -1,6 +1,6 @@
 {% extends 'adminpanel/base.html'%}
 {% block content %}
-<div id="task-app">
+<div id="">
 <!-- Hero -->
 <div class="bg-body-light">
     <div class="content content-full">
@@ -39,7 +39,7 @@
 <!-- Page Content -->
 <div class="content" >
     {% if team.plan.max_tasks_per_project > project.tasks.count %}
-    <a @click.prevent="createModal" href="" data-toggle="modal" class="btn btn-block btn-success"><i class="fa fa-fw fa-plus-circle mr-1 font-size-base"></i>Add New Task</a><br>
+    <a href="" data-toggle="modal" data-target="#CreateModal" class="btn btn-block btn-success"><i class="fa fa-fw fa-plus-circle mr-1 font-size-base"></i>Add New Task</a><br>
     <!-- Projects -->
     {% else %}
     <div class="alert alert-info text-center" role="alert">
@@ -88,10 +88,11 @@
                 </div>
             </div>
         </div>
+        
         {% endfor %}
     </div>
     {% endif %}
-
+  
     <!-- tasks done -->
     {% if tasks_done %}
     <h1>Task Done</h1>
@@ -148,8 +149,7 @@
                             <div class="form-group">
                                 <label>Title</label>
                                 <input type="text" class="form-control is-valid"
-                                name="title" v-model='title' placeholder="Task Title">
-                                <span class="block-content font-size-sm" v-if=showError>The Title Is Missing</span>
+                                name="title" v-model='title' placeholder="Task Title" required>
                             </div>
                         </div>
                     </div>
@@ -334,32 +334,5 @@
 
 
 {% block scripts %}
-<script>
-    const ProjectApp = {
-        data() {
-            return {
-                title:'',
-                showError: false,
-            }
-        },
-        delimiters: ['[[', ']]'],
-        methods: {
-            validateForm(e) {
 
-                if (this.title) {
-                    return true
-                }
-                this.showError = true;
-                e.preventDefault();
-                return false
-            },
-
-            createModal() {
-                $("#CreateModal").modal("show");
-            },
-        }
-    }
-
-    Vue.createApp(ProjectApp).mount('#task-app')
-</script>
 {% endblock %}

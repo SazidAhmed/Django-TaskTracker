@@ -43,7 +43,7 @@ class Team(models.Model):
     created_by = models.ForeignKey(User, related_name='created_teams', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=CHOICES_STATUS, default=ACTIVE)
-    plan = models.ForeignKey(Plan, related_name='teams', on_delete=models.CASCADE)
+    plan = models.ForeignKey(Plan, related_name='teams', on_delete=models.CASCADE, default=1)
     plan_end_date = models.DateTimeField(blank=True, null=True)
     plan_status = models.CharField(max_length=20, choices=CHOICES_PLAN_STATUS, default=PLAN_ACTIVE)
     class Meta:
